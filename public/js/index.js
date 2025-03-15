@@ -207,27 +207,27 @@ function showNotification(message) {
         const style = document.createElement('style')
         style.textContent = `
             .notification-container {
-                position: fixed
-                bottom: 20px
-                right: 20px
-                z-index: 9999
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 9999;
             }
             .notification {
-                background: var(--primary-color)
-                color: white
-                padding: 1rem
-                margin-top: 0.5rem
-                border-radius: 4px
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1)
-                transform: translateX(100%)
-                animation: slideIn 0.3s forwards, fadeOut 0.3s 2.7s forwards
-                max-width: 300px
+                background: var(--primary-color);
+                color: white;
+                padding: 1rem;
+                margin-top: 0.5rem;
+                border-radius: 4px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                transform: translateX(100%);
+                animation: slideIn 0.3s forwards, fadeOut 0.3s 2.7s forwards;
+                max-width: 300px;
             }
             @keyframes slideIn {
-                to { transform: translateX(0) }
+                to { transform: translateX(0); }
             }
             @keyframes fadeOut {
-                to { opacity: 0 }
+                to { opacity: 0; }
             }
         `
         document.head.appendChild(style)

@@ -1,5 +1,5 @@
-
-<link rel="stylesheet" href="/css/header.css">
+<meta class="csrf-token" content="{{ csrf_token() }}">
+<link rel="stylesheet" href="/css/hf/header.css">
 <header>
 	<nav>
 		<button class="menu-toggle" aria-label="Toggle menu">

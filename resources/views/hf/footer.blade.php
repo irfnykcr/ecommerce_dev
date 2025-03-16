@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/css/footer.css">
+<link rel="stylesheet" href="/css/hf/footer.css">
 <footer>
 	<div class="footer-container">
 		<div class="footer-column">

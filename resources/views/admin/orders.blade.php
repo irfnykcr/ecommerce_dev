@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="/css/admin/admin.css">
     <link rel="stylesheet" href="/css/admin/styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+	<script>
+		window.sales_info = {!! json_encode($sales_info) !!}
+        window.this_week_sales = sales_info["this_week_sales"]
+        window.last_week_sales = sales_info["last_week_sales"]
+        window.this_month_sales = sales_info["this_month_sales"]
+        window.last_month_sales = sales_info["last_month_sales"]
+    </script>
 </head>
 <body>
     <div class="admin-container">
@@ -15,20 +22,40 @@
         <main class="main-content">
 			@include("admin.hf.header")
             <div class="dashboard-content">
-                <div class="page-header">
+			<div class="page-header">
                     <h1>Orders</h1>
                     <div class="date-filter">
                         <select id="dateRange">
-                            <option value="today">Today</option>
-                            <option value="week" selected>This Week</option>
-                            <option value="month">This Month</option>
-                            <option value="year">This Year</option>
+                            <option value="this_week" selected>This Week</option>
+                            <option value="last_week" selected>Last Week</option>
+                            <option value="this_month">This Month</option>
+                            <option value="last_month">Last Month</option>
+                            <option value="this_year">This Year</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Order Stats -->
+                <!-- Stats Cards -->
                 <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon sales-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3 class="stat-sales-header">This week Sales</h3>
+							@php
+							$sales_change = ($sales_info["this_week"]["total_sales"] - $sales_info["last_week"]["total_sales"]) / $sales_info["last_week"]["total_sales"] * 100;
+							$sales_change = round($sales_change, 2);
+							$sales_state = $sales_change > 0 ? "positive" : "negative";
+							@endphp
+                            <p class="stat-value stat-sales-value">₺{{$sales_info["this_week"]["total_sales"]}}</p>
+                            <p class="stat-change stat-sales-change {{$sales_state}}">{{$sales_change}}% <span>from last week</span></p>
+                        </div>
+                    </div>
+                    
                     <div class="stat-card">
                         <div class="stat-icon orders-icon">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -39,47 +66,50 @@
                             </svg>
                         </div>
                         <div class="stat-info">
-                            <h3>Total Orders</h3>
-                            <p class="stat-value">156</p>
+                            <h3 class="stat-orders-header">This week Orders</h3>
+							@php
+							$orders_change = ($sales_info["this_week"]["orders"] - $sales_info["last_week"]["orders"]) / $sales_info["last_week"]["orders"] * 100;
+							$orders_change = round($orders_change, 2);
+							$orders_state = $orders_change > 0 ? "positive" : "negative";
+							@endphp
+                            <p class="stat-value stat-orders-value">{{$sales_info["this_week"]["orders"]}}</p>
+                            <p class="stat-change stat-orders-change {{$orders_state}}">{{$orders_change}}% <span>from last week</span></p>
                         </div>
                     </div>
                     
                     <div class="stat-card">
-                        <div class="stat-icon processing-icon">
+                        <div class="stat-icon customers-icon">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                             </svg>
                         </div>
                         <div class="stat-info">
-                            <h3>Processing</h3>
-                            <p class="stat-value">28</p>
+                            <h3 class="stat-customers-header">This week Customers</h3>
+							@php
+							$customers_change = ($sales_info["this_week"]["customers"] - $sales_info["last_week"]["customers"]) / $sales_info["last_week"]["customers"] * 100;
+							$customers_change = round($customers_change, 2);
+							$customers_state = $customers_change > 0 ? "positive" : "negative";
+							@endphp
+                            <p class="stat-value stat-customers-value">{{$sales_info["this_week"]["customers"]}}</p>
+                            <p class="stat-change stat-customers-change {{$customers_state}}">{{$customers_change}}% <span>from last week</span></p>
                         </div>
                     </div>
                     
                     <div class="stat-card">
-                        <div class="stat-icon shipped-icon">
+                        <div class="stat-icon conversion-icon">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 12h14"></path>
-                                <path d="M12 5l7 7-7 7"></path>
+                                <path d="M12 20V10"></path>
+                                <path d="M18 20V4"></path>
+                                <path d="M6 20v-4"></path>
                             </svg>
                         </div>
                         <div class="stat-info">
-                            <h3>Shipped</h3>
-                            <p class="stat-value">42</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon completed-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                            </svg>
-                        </div>
-                        <div class="stat-info">
-                            <h3>Completed</h3>
-                            <p class="stat-value">86</p>
+                            <h3>Conversion Rate</h3>
+                            <p class="stat-value">?%</p>
+                            <p class="stat-change negative">?% <span>from last week</span></p>
                         </div>
                     </div>
                 </div>
@@ -115,8 +145,8 @@
                         <select id="sortFilter">
                             <option value="newest">Newest</option>
                             <option value="oldest">Oldest</option>
-                            <option value="amount-asc">Amount: Low to High</option>
-                            <option value="amount-desc">Amount: High to Low</option>
+                            <option value="price-asc">price: Low to High</option>
+                            <option value="price-desc">price: High to Low</option>
                         </select>
                     </div>
                 </div>
@@ -129,80 +159,55 @@
                                 <th>Order ID</th>
                                 <th>Customer</th>
                                 <th>Date</th>
-                                <th>Amount</th>
+                                <th>Price</th>
                                 <th>Payment</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>#ORD-5289</td>
-                                <td>
-                                    <div class="customer-cell">
-                                        <div class="customer-avatar">AY</div>
-                                        <div>
-                                            <p class="customer-name">Ahmet Yılmaz</p>
-                                            <p class="customer-email">ahmet@example.com</p>
+                        <tbody class="orders-tbody">
+							@foreach ($recent as $x=>$y)
+								@php
+									$status = "";
+									if ($y["status"] == 0) {
+										$status = "cancelled";
+									} elseif ($y["status"] == 1) {
+										$status = "completed";
+									} elseif ($y["status"] == 2) {
+										$status = "processing";
+									} elseif ($y["status"] == 3) {
+										$status = "shipped";
+									}
+								@endphp
+								<tr>
+                                    <td>{{$y["id"]}}</td>
+                                    <!-- <td>{{$y["user_id"]}}</td> -->
+                                    <td>
+										<div class="customer-cell">
+											<div class="customer-avatar">?</div>
+											<div>
+												<p class="customer-name">?</p>
+												<p class="customer-id">{{$y["user_id"]}}</p>
+												<p class="customer-email">?@?.com</p>
+											</div>
+										</div>
+									</td>
+                                    <td>{{$y["created_at"]}}</td>
+                                    <td>{{$y["total_price"]}}</td>
+                                    <td>{{$y["payment"]}}</td>
+                                    <td><span class="status-badge {{$status}}">{{$status}}</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn view-btn" title="View Order">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                </svg>
+                                            </button>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>15 Mar 2025</td>
-                                <td>₺599.90</td>
-                                <td>Credit Card</td>
-                                <td><span class="status-badge completed">Completed</span></td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="action-btn view-btn" title="View Order">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                                <circle cx="12" cy="12" r="3"></circle>
-                                            </svg>
-                                        </button>
-                                        <button class="action-btn print-btn" title="Print Invoice">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                                                <rect x="6" y="14" width="12" height="8"></rect>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#ORD-5288</td>
-                                <td>
-                                    <div class="customer-cell">
-                                        <div class="customer-avatar">ZK</div>
-                                        <div>
-                                            <p class="customer-name">Zeynep Kaya</p>
-                                            <p class="customer-email">zeynep@example.com</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>15 Mar 2025</td>
-                                <td>₺1,199.80</td>
-                                <td>PayPal</td>
-                                <td><span class="status-badge processing">Processing</span></td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="action-btn view-btn" title="View Order">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                                <circle cx="12" cy="12" r="3"></circle>
-                                            </svg>
-                                        </button>
-                                        <button class="action-btn print-btn" title="Print Invoice">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                                                <rect x="6" y="14" width="12" height="8"></rect>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- More order rows would go here -->
+                                    </td>
+                                </tr>
+							@endforeach
                         </tbody>
                     </table>
                 </div>
@@ -216,11 +221,10 @@
                         Previous
                     </button>
                     <div class="pagination-numbers">
-                        <button class="pagination-number active">1</button>
-                        <button class="pagination-number">2</button>
-                        <button class="pagination-number">3</button>
-                        <span class="pagination-ellipsis">...</span>
-                        <button class="pagination-number">10</button>
+						<button class="pagination-number active">1</button>
+						@for ($i = 2; $i <= $orders_length-1; $i++)
+							<button class="pagination-number">{{ $i }}</button>
+						@endfor
                     </div>
                     <button class="pagination-btn next">
                         Next
@@ -322,5 +326,6 @@
     </div>
 
     <script src="/js/admin/admin.js"></script>
+    <script src="/js/admin/orders.js"></script>
 </body>
 </html>

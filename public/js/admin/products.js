@@ -32,26 +32,26 @@
 	</td>
 </tr> */}
 function closeAllModals() {
-    const modals = document.querySelectorAll('.modal');
+    const modals = document.querySelectorAll('.modal')
     modals.forEach(modal => {
-        modal.classList.remove('active');
-    });
-    document.body.style.overflow = '';
+        modal.classList.remove('active')
+    })
+    document.body.style.overflow = ''
 }
 const insertProduct = async ()=>{
 	const productForm = document.querySelector("#productForm")
 
-	const name = productForm.querySelector("#productName").value;
+	const name = productForm.querySelector("#productName").value
 	if (name === ""){
 		return {"status": "error", "error":"name"}
 	}
-	const category = productForm.querySelector("#productCategory").value;
-	const price = productForm.querySelector("#productPrice").value;
-	const discount = productForm.querySelector("#productDiscount").value;
-	const stock = productForm.querySelector("#productStock").value;
-	const status = productForm.querySelector("#productStatus").value;
-	const description = productForm.querySelector("#productDescription").value;
-	const image = productForm.querySelector("#productimageURLs").value;
+	const category = productForm.querySelector("#productCategory").value
+	const price = productForm.querySelector("#productPrice").value
+	const discount = productForm.querySelector("#productDiscount").value
+	const stock = productForm.querySelector("#productStock").value
+	const status = productForm.querySelector("#productStatus").value
+	const description = productForm.querySelector("#productDescription").value
+	const image = productForm.querySelector("#productimageURLs").value
 	
 	return await fetch("/admin/insertProduct", {
 		method: "POST",
@@ -72,18 +72,18 @@ const insertProduct = async ()=>{
 	})
 	.then(response => {
 		if (!response.ok) {
-			throw new Error('Network response was not ok');
+			throw new Error('Network response was not ok')
 		}
 		return {"status": "error", "error": response.json()}
 	})
 	.then(data => {
-		console.log("Product inserted successfully:", data);
+		console.log("Product inserted successfully:", data)
 		return {"status": "success"}
 	})
 	.catch(error => {
-		console.error("Error inserting product:", error);
+		console.error("Error inserting product:", error)
 		return {"status": "error", "error": error}
-	});
+	})
 }
 document.addEventListener('DOMContentLoaded', () => {
 	const insertProduct_button = document.querySelector(".insertProductButton")
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			if (r.status === "success"){
 				closeAllModals()
 				if(confirm("Product inserted successfully. Do you want to reload the page?")) {
-					window.location.reload();
+					window.location.reload()
 				}
 			}
 		})

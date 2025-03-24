@@ -41,16 +41,15 @@
                     <div class="filter-group">
                         <select id="categoryFilter">
                             <option value="">All Categories</option>
-                            <option value="tshirts">T-Shirts</option>
-                            <option value="hoodies">Hoodies</option>
-                            <option value="sweatshirts">Sweatshirts</option>
-                            <option value="cases">Phone Cases</option>
+							@foreach ($categories as $category)
+							<option value="{{$category}}">{{$category}}</option>
+							@endforeach
                         </select>
                         
                         <select id="statusFilter">
                             <option value="">All Status</option>
                             <option value="active">Active</option>
-                            <option value="draft">Draft</option>
+                            <option value="disabled">Disabled</option>
                             <option value="outofstock">Out of Stock</option>
                         </select>
                         
@@ -99,12 +98,12 @@
                                                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                             </svg>
                                         </button>
-                                        <button class="action-btn delete-btn" title="Delete Product" data-id='{{$product["id"]}}'>
+                                        <!-- <button class="action-btn delete-btn" title="Delete Product" data-id='{{$product["id"]}}'>
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <polyline points="3 6 5 6 21 6"></polyline>
                                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                                             </svg>
-                                        </button>
+                                        </button> -->
                                     </div>
                                 </td>
                                 <td>
@@ -112,11 +111,28 @@
                                         <img src="https://placehold.co/60x60" alt='{{$product["name"]}}'>
                                         <div>
                                             <p class="product-name">{{$product["name"]}}</p>
-                                            <p class="product-id">#P-{{$product["id"]}}</p>
+                                            <p class="product-id">#{{$product["id"]}}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{$product["status"]}}</td>
+                                <td>
+									@php
+										switch($product["status"]) {
+											case "1":
+												echo '<span class="status-badge active">Active</span>';
+												break;
+											case "0":
+												echo '<span class="status-badge cancelled disabled">Disabled</span>';
+												break;
+											case "2":
+												echo '<span class="status-badge processing outofstock">OutofStock</span>';
+												break;
+											default:
+												echo '<span class="status-badge disabled">Disabled</span>';
+												break;
+										}
+									@endphp
+								</td>
                                 <td>{{$product["category"]}}</td>
                                 <td>{{$product["description"]}}</td>
                                 <td>{{$product["price"]}}</td>
@@ -133,7 +149,7 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="pagination">
+                <!-- <div class="pagination">
                     <button class="pagination-btn prev" disabled>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="15 18 9 12 15 6"></polyline>
@@ -153,12 +169,12 @@
                             <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
                     </button>
-                </div>
+                </div> -->
             </div>
         </main>
     </div>
 
-    <!-- Add/Edit Product Modal -->
+    <!-- Add Product Modal -->
     <div class="modal" id="productModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -196,8 +212,8 @@
                             <label for="productStatus">Status</label>
                             <select id="productStatus" required>
                                 <option value="1">Active</option>
-                                <option value="2">Draft</option>
-                                <option value="0">Out of Stock</option>
+                                <option value="0">Disabled</option>
+                                <option value="2">Out of Stock</option>
                             </select>
                         </div>
                     </div>
@@ -209,12 +225,78 @@
 					
 					<div class="form-group">
 						<label for="productimageURLs">imageURLs</label>
-						<input type="text" id="productimageURLs" value='{"512":"", "256":"", "128":""}' required>
+						<textarea id="productimageURLs" rows="4" required>{"512":"", "256":"", "128":""}</textarea>
 					</div>
 
                     <div class="form-actions">
                         <button type="button" class="secondary-btn" id="cancelProductBtn">Cancel</button>
                         <button type="submit" class="primary-btn insertProductButton">Save Product</button>
+                    </div>
+				</div>
+            </div>
+        </div>
+    </div>
+	<!-- edit -->
+	<div class="modal" id="productModal2">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Product</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="productForm2">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="productID">ID</label>
+                            <input type="text" id="productID" required disabled readonly>
+                        </div>
+						<div class="form-group">
+                            <label for="productName">name</label>
+                            <input type="text" id="productName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productCategory">Category</label>
+                            <select id="productCategory" required>
+								@foreach ($categories as $category)
+                                <option value="{{$category}}">{{$category}}</option>
+								@endforeach
+                            </select>
+                        </div>
+						<div class="form-group">
+                            <label for="productPrice">Price (₺)</label>
+                            <input type="number" id="productPrice" min="0" step="0.01" value="0" required>
+                        </div>
+						<div class="form-group">
+                            <label for="productDiscount">Discount</label>
+                            <input type="number" id="productDiscount" min="0" max="100" value="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productStock">Stock</label>
+                            <input type="number" id="productStock" min="0" value="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productStatus">Status</label>
+                            <select id="productStatus" required>
+								<option value="1">Active</option>
+                                <option value="0">Disabled</option>
+                                <option value="2">Out of Stock</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+					<div class="form-group">
+						<label for="productDescription">description</label>
+						<input type="text" id="productDescription" value='{"renk":"siyah/beyaz/gri","beden":"s/m/l"}' required>
+					</div>
+					
+					<div class="form-group">
+						<label for="productimageURLs">imageURLs</label>
+						<textarea id="productimageURLs" rows="4" required>{"512":"", "256":"", "128":""}</textarea>
+					</div>
+
+                    <div class="form-actions">
+                        <button type="button" class="secondary-btn" id="cancelProductBtn">Cancel</button>
+                        <button type="submit" class="primary-btn editProductButton">Save Product</button>
                     </div>
 				</div>
             </div>

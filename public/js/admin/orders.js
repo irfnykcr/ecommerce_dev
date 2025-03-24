@@ -334,3 +334,198 @@ if (orderSearch && orderRows.length > 0) {
         })
     })
 }
+
+//modal
+//code on the html:
+{/* <div class="modal-header">
+	<h2>Order #id</h2>
+	<button class="close-modal">&times;</button>
+</div>
+<div class="modal-body">
+	<div class="order-details">
+		<div class="order-info-grid">
+			<div class="order-info-card">
+				<h3>Customer Information</h3>
+				<div class="info-group">
+					<!-- <p><strong>Name:</strong> Ahmet Yılmaz</p>
+					<p><strong>Email:</strong> ahmet@example.com</p>
+					<p><strong>Phone:</strong> +90 555 123 4567</p> -->
+				</div>
+			</div>
+			
+			<div class="order-info-card">
+				<h3>Shipping Address</h3>
+				<div class="info-group">
+					<!-- <p>Ahmet Yılmaz</p>
+					<p>Atatürk Caddesi No: 123</p>
+					<p>Kadıköy, İstanbul 34700</p>
+					<p>Turkey</p> -->
+				</div>
+			</div>
+			
+			<div class="order-info-card">
+				<h3>Order Information</h3>
+				<div class="info-group">
+					<!-- <p><strong>Order Date:</strong> 15 Mar 2025</p>
+					<p><strong>Payment Method:</strong> Credit Card</p>
+					<p><strong>Status:</strong> <span class="status-badge completed">Completed</span></p> -->
+				</div>
+			</div>
+			
+			<div class="order-info-card">
+				<h3>Order Summary</h3>
+				<div class="info-group">
+					<!-- <p><strong>Subtotal:</strong> ₺599.90</p>
+					<p><strong>Shipping:</strong> ₺0.00</p>
+					<p><strong>Tax:</strong> ₺0.00</p>
+					<p><strong>Total:</strong> ₺599.90</p> -->
+				</div>
+			</div>
+		</div>
+		
+		<div class="order-items">
+			<h3>Order Items</h3>
+			<table class="data-table">
+				<thead>
+					<tr>
+						<th>Product</th>
+						<th>Price</th>
+						<th>Quantity</th>
+						<th>Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<div class="product-cell">
+								<!-- <img src="https://placehold.co/60x60" alt="Basic Oversize Sweatshirt - Siyah"> -->
+								<div>
+									<!-- <p class="product-name">Basic Oversize Sweatshirt - Siyah</p>
+									<p class="product-id">SKU: SWT-BLK-001</p> -->
+								</div>
+							</div>
+						</td>
+						<!-- <td>₺599.90</td>
+						<td>1</td>
+						<td>₺599.90</td> -->
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="order-actions">
+			<button class="secondary-btn">Update Status</button>
+			<button class="primary-btn">Print Invoice</button>
+		</div>
+	</div>
+</div> */}
+
+function openModal(modal, btn) {
+	if (modal) {
+		modal.classList.add('active')
+		document.body.style.overflow = 'hidden'
+		// Get the order details to display in the modal
+		const orderId = btn.closest('tr').cells[1].textContent
+		const customerId = btn.closest('tr').querySelector('.customer-id').textContent
+		const orderDate = btn.closest('tr').cells[3].textContent
+		const totalPrice = btn.closest('tr').cells[4].textContent
+		const paymentMethod = btn.closest('tr').cells[5].textContent
+		const statusElement = btn.closest('tr').querySelector('.status-badge')
+		const orderStatus = statusElement.textContent
+		const statusClass = statusElement.classList[1]
+
+		console.log("orderId", orderId)
+		console.log("customerId", customerId)
+		console.log("orderDate", orderDate)
+		console.log("totalPrice", totalPrice)
+		console.log("paymentMethod", paymentMethod)
+		console.log("orderStatus", orderStatus)
+		console.log("statusClass", statusClass)
+
+		// Update modal header with order ID
+		modal.querySelector('.modal-header h2').textContent = `Order #${orderId}`
+
+		// Populate customer information
+		const customerInfoCard = modal.querySelector('.order-info-card:nth-child(1) .info-group')
+		customerInfoCard.innerHTML = `
+			<p><strong>Customer ID:</strong> ${customerId}</p>
+			<p><strong>Email:</strong> Not available</p>
+			<p><strong>Phone:</strong> Not available</p>
+		`
+
+		// Populate shipping address (placeholder)
+		const shippingAddressCard = modal.querySelector('.order-info-card:nth-child(2) .info-group')
+		shippingAddressCard.innerHTML = `
+			<p>Address information not available</p>
+		`
+
+		// Populate order information
+		const orderInfoCard = modal.querySelector('.order-info-card:nth-child(3) .info-group')
+		orderInfoCard.innerHTML = `
+			<p><strong>Order Date:</strong> ${orderDate}</p>
+			<p><strong>Payment Method:</strong> ${paymentMethod}</p>
+			<p><strong>Status:</strong> <span class="status-badge ${statusClass}">${orderStatus}</span></p>
+		`
+
+		// Populate order summary
+		const orderSummaryCard = modal.querySelector('.order-info-card:nth-child(4) .info-group')
+		orderSummaryCard.innerHTML = `
+			<p><strong>Total:</strong> ${totalPrice}</p>
+		`
+
+		// Placeholder for order items - in a real implementation, you'd fetch the line items
+		const orderItemsBody = modal.querySelector('.order-items tbody')
+		// Fetch order items data from server
+		fetch(`/admin/getOrderedItems_Order_id`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRF-Token': document.querySelector('.csrf-token').content
+			},
+			body: JSON.stringify({ order_id: orderId })
+		})
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Failed to fetch order items');
+			}
+			return response.json();
+		})
+		.then(items => {
+			if (items && items.length > 0) {
+				orderItemsBody.innerHTML = items.map(item => `
+					<tr>
+						<td>
+							<div class="product-cell">
+								<div>
+									<p class="product-name">${item.item_name || 'Product Name Not Available'}</p>
+									<p class="product-id">ID: ${item.id || 'N/A'}</p>
+								</div>
+							</div>
+						</td>
+						<td>${item.quantity || '1'}</td>
+						<td>${item.price || '0.00'}</td>
+					</tr>
+				`).join('');
+			} else {
+				orderItemsBody.innerHTML = '<tr><td colspan="4">No items found for this order</td></tr>';
+			}
+		})
+		.catch(error => {
+			console.error('Error fetching order items:', error);
+			orderItemsBody.innerHTML = '<tr><td colspan="4">Failed to load order items</td></tr>';
+		});
+		orderItemsBody.innerHTML = `
+			<tr>
+				
+			</tr>
+		`
+    }
+}
+// View Order Modal
+if (viewOrderBtns.length > 0 && orderModal) {
+	viewOrderBtns.forEach(btn => {
+		btn.addEventListener('click', () => {
+			openModal(orderModal, btn)
+		})
+	})
+}

@@ -165,7 +165,7 @@
                                     <th>Amount</th>
                                     <th>Payment</th>
                                     <th>Status</th>
-                                    <th>Actions</th>
+                                    <!-- <th>Actions</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -189,7 +189,7 @@
                                     <td>{{$y["total_price"]}}</td>
                                     <td>{{$y["payment"]}}</td>
                                     <td><span class="status-badge {{$status}}">{{$status}}</span></td>
-                                    <td>
+                                    <!-- <td>
                                         <div class="action-buttons">
                                             <button class="action-btn view-btn" title="View Order">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -198,7 +198,7 @@
                                                 </svg>
                                             </button>
                                         </div>
-                                    </td>
+                                    </td> -->
                                 </tr>
 								@endforeach
                             </tbody>

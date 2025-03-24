@@ -1,7 +1,5 @@
 // DOM Elements
 const dateRange = document.getElementById('dateRange')
-const addProductBtn = document.getElementById('addProductBtn')
-const productModal = document.getElementById('productModal')
 const closeModal = document.querySelectorAll('.close-modal')
 const cancelProductBtn = document.getElementById('cancelProductBtn')
 const orderModal = document.getElementById('orderModal')
@@ -9,36 +7,12 @@ const viewOrderBtns = document.querySelectorAll('.view-btn')
 const selectAll = document.getElementById('selectAll')
 const productSelects = document.querySelectorAll('.product-select')
 
-// Modal Functions
-function openModal(modal) {
-    if (modal) {
-        modal.classList.add('active')
-        document.body.style.overflow = 'hidden'
-    }
-}
-
 function closeAllModals() {
     const modals = document.querySelectorAll('.modal')
     modals.forEach(modal => {
         modal.classList.remove('active')
     })
     document.body.style.overflow = ''
-}
-
-// Add Product Modal
-if (addProductBtn && productModal) {
-    addProductBtn.addEventListener('click', () => {
-        openModal(productModal)
-    })
-}
-
-// View Order Modal
-if (viewOrderBtns.length > 0 && orderModal) {
-    viewOrderBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            openModal(orderModal)
-        })
-    })
 }
 
 // Close Modals
@@ -69,54 +43,54 @@ document.addEventListener('click', (e) => {
     })
 })
 
-// Select All Products
-if (selectAll && productSelects.length > 0) {
-    selectAll.addEventListener('change', () => {
-        productSelects.forEach(checkbox => {
-            checkbox.checked = selectAll.checked
-        })
-    })
+// // Select All Products
+// if (selectAll && productSelects.length > 0) {
+//     selectAll.addEventListener('change', () => {
+//         productSelects.forEach(checkbox => {
+//             checkbox.checked = selectAll.checked
+//         })
+//     })
     
-    productSelects.forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            const allChecked = Array.from(productSelects).every(c => c.checked)
-            const someChecked = Array.from(productSelects).some(c => c.checked)
+//     productSelects.forEach(checkbox => {
+//         checkbox.addEventListener('change', () => {
+//             const allChecked = Array.from(productSelects).every(c => c.checked)
+//             const someChecked = Array.from(productSelects).some(c => c.checked)
             
-            selectAll.checked = allChecked
-            selectAll.indeterminate = someChecked && !allChecked
-        })
-    })
-}
+//             selectAll.checked = allChecked
+//             selectAll.indeterminate = someChecked && !allChecked
+//         })
+//     })
+// }
 
-// Image Upload Preview
-const productImage1 = document.getElementById('productImage1')
-const imagePreviewContainer = document.querySelector('.image-preview-container')
+// // Image Upload Preview
+// const productImage1 = document.getElementById('productImage1')
+// const imagePreviewContainer = document.querySelector('.image-preview-container')
 
-if (productImage1 && imagePreviewContainer) {
-    productImage1.addEventListener('change', (e) => {
-        const file = e.target.files[0]
-        if (file) {
-            const reader = new FileReader()
-            reader.onload = function(event) {
-                const preview = document.createElement('div')
-                preview.className = 'image-preview'
-                preview.innerHTML = `
-                    <img src="${event.target.result}" alt="Product Image">
-                    <button class="remove-image" title="Remove Image">&times</button>
-                `
-                imagePreviewContainer.appendChild(preview)
+// if (productImage1 && imagePreviewContainer) {
+//     productImage1.addEventListener('change', (e) => {
+//         const file = e.target.files[0]
+//         if (file) {
+//             const reader = new FileReader()
+//             reader.onload = function(event) {
+//                 const preview = document.createElement('div')
+//                 preview.className = 'image-preview'
+//                 preview.innerHTML = `
+//                     <img src="${event.target.result}" alt="Product Image">
+//                     <button class="remove-image" title="Remove Image">&times</button>
+//                 `
+//                 imagePreviewContainer.appendChild(preview)
                 
-                // Remove image functionality
-                const removeBtn = preview.querySelector('.remove-image')
-                removeBtn.addEventListener('click', () => {
-                    preview.remove()
-                    productImage1.value = ''
-                })
-            }
-            reader.readAsDataURL(file)
-        }
-    })
-}
+//                 // Remove image functionality
+//                 const removeBtn = preview.querySelector('.remove-image')
+//                 removeBtn.addEventListener('click', () => {
+//                     preview.remove()
+//                     productImage1.value = ''
+//                 })
+//             }
+//             reader.readAsDataURL(file)
+//         }
+//     })
+// }
 
 // Charts (if on dashboard page)
 if (document.getElementById('salesChart') && document.getElementById('productsChart')) {

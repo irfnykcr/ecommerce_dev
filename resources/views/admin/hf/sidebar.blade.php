@@ -47,7 +47,7 @@
 					Customers
 				</a>
 			</li>
-			<li>
+			<!-- <li>
 				<a href="/admin/analytics">
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<line x1="18" y1="20" x2="18" y2="10"></line>
@@ -56,8 +56,8 @@
 					</svg>
 					Analytics
 				</a>
-			</li>
-			<li>
+			</li> -->
+			<!-- <li>
 				<a href="/admin/settings">
 					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<circle cx="12" cy="12" r="3"></circle>
@@ -65,7 +65,7 @@
 					</svg>
 					Settings
 				</a>
-			</li>
+			</li> -->
 		</ul>
 	</nav>
 	

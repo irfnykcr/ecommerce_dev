@@ -156,13 +156,13 @@
                     <table class="data-table orders-table">
                         <thead>
                             <tr>
+                                <th>Actions</th>
                                 <th>Order ID</th>
                                 <th>Customer</th>
                                 <th>Date</th>
                                 <th>Price</th>
                                 <th>Payment</th>
                                 <th>Status</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody class="orders-tbody">
@@ -180,6 +180,16 @@
 									}
 								@endphp
 								<tr>
+									<td>
+										<div class="action-buttons">
+											<button class="action-btn view-btn" title="View Order">
+												<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+													<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+													<circle cx="12" cy="12" r="3"></circle>
+												</svg>
+											</button>
+										</div>
+									</td>
                                     <td>{{$y["id"]}}</td>
                                     <!-- <td>{{$y["user_id"]}}</td> -->
                                     <td>
@@ -196,16 +206,6 @@
                                     <td>{{$y["total_price"]}}</td>
                                     <td>{{$y["payment"]}}</td>
                                     <td><span class="status-badge {{$status}}">{{$status}}</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="action-btn view-btn" title="View Order">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                                    <circle cx="12" cy="12" r="3"></circle>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </td>
                                 </tr>
 							@endforeach
                         </tbody>
@@ -241,7 +241,7 @@
     <div class="modal" id="orderModal">
         <div class="modal-content modal-lg">
             <div class="modal-header">
-                <h2>Order #ORD-5289</h2>
+                <h2>Order #id</h2>
                 <button class="close-modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -250,38 +250,38 @@
                         <div class="order-info-card">
                             <h3>Customer Information</h3>
                             <div class="info-group">
-                                <p><strong>Name:</strong> Ahmet Yılmaz</p>
+                                <!-- <p><strong>Name:</strong> Ahmet Yılmaz</p>
                                 <p><strong>Email:</strong> ahmet@example.com</p>
-                                <p><strong>Phone:</strong> +90 555 123 4567</p>
+                                <p><strong>Phone:</strong> +90 555 123 4567</p> -->
                             </div>
                         </div>
                         
                         <div class="order-info-card">
                             <h3>Shipping Address</h3>
                             <div class="info-group">
-                                <p>Ahmet Yılmaz</p>
+                                <!-- <p>Ahmet Yılmaz</p>
                                 <p>Atatürk Caddesi No: 123</p>
                                 <p>Kadıköy, İstanbul 34700</p>
-                                <p>Turkey</p>
+                                <p>Turkey</p> -->
                             </div>
                         </div>
                         
                         <div class="order-info-card">
                             <h3>Order Information</h3>
                             <div class="info-group">
-                                <p><strong>Order Date:</strong> 15 Mar 2025</p>
+                                <!-- <p><strong>Order Date:</strong> 15 Mar 2025</p>
                                 <p><strong>Payment Method:</strong> Credit Card</p>
-                                <p><strong>Status:</strong> <span class="status-badge completed">Completed</span></p>
+                                <p><strong>Status:</strong> <span class="status-badge completed">Completed</span></p> -->
                             </div>
                         </div>
                         
                         <div class="order-info-card">
                             <h3>Order Summary</h3>
                             <div class="info-group">
-                                <p><strong>Subtotal:</strong> ₺599.90</p>
+                                <!-- <p><strong>Subtotal:</strong> ₺599.90</p>
                                 <p><strong>Shipping:</strong> ₺0.00</p>
                                 <p><strong>Tax:</strong> ₺0.00</p>
-                                <p><strong>Total:</strong> ₺599.90</p>
+                                <p><strong>Total:</strong> ₺599.90</p> -->
                             </div>
                         </div>
                     </div>
@@ -292,7 +292,7 @@
                             <thead>
                                 <tr>
                                     <th>Product</th>
-                                    <th>Price</th>
+                                    <!-- <th>Price</th> -->
                                     <th>Quantity</th>
                                     <th>Total</th>
                                 </tr>
@@ -301,16 +301,16 @@
                                 <tr>
                                     <td>
                                         <div class="product-cell">
-                                            <img src="https://placehold.co/60x60" alt="Basic Oversize Sweatshirt - Siyah">
+                                            <!-- <img src="https://placehold.co/60x60" alt="Basic Oversize Sweatshirt - Siyah"> -->
                                             <div>
-                                                <p class="product-name">Basic Oversize Sweatshirt - Siyah</p>
-                                                <p class="product-id">SKU: SWT-BLK-001</p>
+                                                <!-- <p class="product-name">Basic Oversize Sweatshirt - Siyah</p>
+                                                <p class="product-id">SKU: SWT-BLK-001</p> -->
                                             </div>
                                         </div>
                                     </td>
-                                    <td>₺599.90</td>
+                                    <!-- <td>₺599.90</td>
                                     <td>1</td>
-                                    <td>₺599.90</td>
+                                    <td>₺599.90</td> -->
                                 </tr>
                             </tbody>
                         </table>

@@ -304,10 +304,10 @@
     color: var(--secondary-color);
 }
 
-.outofstock {
+/* .outofstock {
     background-color: rgba(239, 68, 68, 0.1);
     color: var(--danger-color);
-}
+} */
 
 .action-buttons {
     display: flex;

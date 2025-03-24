@@ -1,0 +1,187 @@
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    background-color: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.form-container {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.image-container {
+    flex: 1;
+    background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-rVt1HnJV3TJvbjIYqMryGWok8dek5n.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: none;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.overlay h1 {
+    color: #fff;
+    font-size: 3rem;
+    text-align: center;
+    font-weight: 700;
+    text-transform: lowercase;
+}
+
+.tabs {
+    display: flex;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 0;
+    margin-right: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    position: relative;
+    opacity: 0.7;
+}
+
+.tab-btn.active {
+    opacity: 1;
+    font-weight: 700;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #000;
+}
+
+.form-content {
+    flex: 1;
+}
+
+.form-content.hidden {
+    display: none;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+label::before {
+    content: '*';
+    color: #ff0000;
+    margin-right: 4px;
+}
+
+input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: #333;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 42px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #777;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-transform: uppercase;
+}
+
+.submit-btn:hover {
+    background-color: #333;
+}
+
+.forgot-password {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.forgot-password a {
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+/* Media Queries for Responsive Design */
+@media (min-width: 768px) {
+    .image-container {
+        display: block;
+    }
+}
+
+@media (max-width: 767px) {
+    .container {
+        height: auto;
+        max-width: 100%;
+        box-shadow: none;
+    }
+    
+    .form-container {
+        padding: 20px;
+    }
+}

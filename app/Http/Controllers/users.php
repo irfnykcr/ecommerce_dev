@@ -23,16 +23,30 @@ class users extends Controller{
 
 
     public function register(Request $request){
-        $validated = $request->validate([
-            "email" => "required|email",
-            "password" => "required|string|min:6",
-            "full_name" => "required|string|max:255"
-        ]);
-		$phone_number = "+90 5555555555";
+		if ($request->cookie("firebase_token")){
+			return response()->json(["status"=>"error", "message" => "no"], 400);
+		}
         try {
+			$validated = $request->validate([
+				"email" => "required|email|max:100",
+				"password" => "required|string|min:6|max:255",
+				"full_name" => "required|string|max:100"
+			]);
 
+			if (preg_match('/[^a-zA-Z\s]/', $validated['full_name'])) {
+				return response()->json(["status" => "error", "message" => "Full name contains invalid characters.  Only letters and spaces are allowed."], 400);
+			}
+
+			if (!preg_match('/\d/', $validated["password"])){
+				return response()->json(["status"=>"error", "message" => "Password must contain a numeric character"], 400);
+			}
+
+			$phone_number = "+90 5555555555";
+			
 			$already_exist = DB::table("users")->select("fbase_uid")
-				->where("email", $validated["email"]);
+				->where("email", $validated["email"])
+				->where("deleted", 0)
+				->first();
 			if ($already_exist){
 				return response()->json(["status"=>"error", "message" => "User already exist."], 400);
 			}
@@ -50,7 +64,8 @@ class users extends Controller{
             ];
 			try{
 				$createdUser = $auth->createUser($userProperties);
-			} catch (Exception) {
+			} catch (Exception $e) {
+				dd($e);
 				return response()->json(["status"=>"error", "message" => "Could not create user."], 400);
 			}
 			$hashed_psw = $this->hashPassword($validated["password"]);
@@ -83,16 +98,19 @@ class users extends Controller{
         }
     }
 
-	public function login(Request $request)
-    {
-        $validated = $request->validate([
-            "email" => "required|email",
-            "password" => "required|string"
-        ]);
-
+	public function login(Request $request){
+		if ($request->cookie("firebase_token")){
+			return response()->json(["status"=>"error", "message" => "no"], 400);
+		}
         try {
+			$validated = $request->validate([
+				"email" => "required|email|max:100",
+				"password" => "required|string|max:255"
+			]);
+
 			$already_exist = DB::table("users")->select("fbase_uid")
-				->where("email", $validated["email"]);
+				->where("email", $validated["email"])
+				->where("deleted", 0);
 			if (!$already_exist){
 				return response()->json(["status"=>"error", "message" => "User does not exist."], 400);
 			}
@@ -110,7 +128,10 @@ class users extends Controller{
 				return response()->json(["status"=>"error", "message" => "User not found2."], 404);
 			}
 
-            $user = DB::table("users")->where("fbase_uid", $firebaseUserId)->first();
+            $user = DB::table("users")
+				->where("fbase_uid", $firebaseUserId)
+				->where("deleted", 0)
+				->first();
 
             if (!$user) {
                 return response()->json(["status"=>"error", "message" => "User not found."], 404);
@@ -132,11 +153,41 @@ class users extends Controller{
             return response()->json(["status"=>"success", "message" => "User logged in successfully."], 200)
 				->cookie("firebase_token", $jwt, 60 * 24 * 7, null, null, true, true);
         } catch (Exception $e) {
-            \Log::error($e->getMessage());
-			dd($e);
-            return response()->json(["status"=>"error", "message" => $e->getMessage()], 500);
+            return response()->json(["status"=>"error", "message" => "User does not exist2."], 400);
         }
     }
+
+	public function updateInfo(Request $request){
+		try{
+			$validated = $request->validate([
+				"full_name" => "required|string|max:100",
+				"email" => "required|email|max:100",
+				"phone_number" => "required|string|max:20"
+			]);
+
+			if (preg_match('/[^a-zA-Z\s]/', $validated['full_name'])) {
+				return response()->json(["status" => "error", "message" => "Full name contains invalid characters.  Only letters and spaces are allowed."], 400);
+			}
+
+			$fbase_uid = $request->session()->get("fbase_uid");
+
+			$r = DB::table("users")
+				->where("fbase_uid", $fbase_uid)
+				->update([
+					"full_name" => $validated["full_name"],
+					"email" => $validated["email"],
+					"phone_number" => $validated["phone_number"]
+				]);
+			if (!$r){
+				return response()->json(["status"=>"error", "message" => "Something went wrong."], 200);
+			}
+			return response()->json(["status"=>"success", "message" => "User info updated successfully."], 200);
+
+
+		} catch (Exception $e){
+			return response()->json(["status"=>"error", "message" => $e->getMessage()], 200);
+		}
+	}
 
 	// public function _register(Request $request){
 	// 	if ($request->session()->has("login_68474a12-b04b-424d")) {

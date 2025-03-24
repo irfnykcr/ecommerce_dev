@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 class JwtAuth{
 
 	private function returnLogin_error(string $msg){
-		return redirect("/account/login?msg=$msg")->cookie('firebase_token', '', -1);
+		return redirect("/account/login?msg=$msg");
 	}
 
     public function handle(Request $request, Closure $next){
@@ -36,8 +36,8 @@ class JwtAuth{
         try {
             $key = env('JWT_SECRET');
 			$decoded = JWT::decode($token, new Key($key, 'HS256'));
-            $request->attributes->add(['fbase_uid' => $decoded->sub]);
-
+			$request->session()->put('fbase_uid', $decoded->sub);
+			$request->attributes->add(['fbase_uid' => $decoded->sub]);
         } catch (ExpiredException $e) {
             Log::error('JWT Token expired: ' . $e->getMessage());
             // return response()->json(['error' => 'Token is expired.'], 401);

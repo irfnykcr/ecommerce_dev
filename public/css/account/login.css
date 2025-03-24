@@ -167,6 +167,14 @@ input:focus {
     text-decoration: underline;
 }
 
+.error-message {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--error-color);
+	color: white;
+}
+
 /* Media Queries for Responsive Design */
 @media (min-width: 768px) {
     .image-container {

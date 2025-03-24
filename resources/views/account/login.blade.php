@@ -8,8 +8,6 @@
 	<link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-	
 </head>
 <body>
 	@include("hf.header")
@@ -21,7 +19,8 @@
             </div>
             
             <div class="form-content" id="login-form">
-                <h2>Member Login</h2>
+			<div class="error-message error-message-login" style="display:none"></div>
+			<h2>Member Login</h2>
 				<div class="input-group">
 					<label for="login-email">Email</label>
 					<input type="email" id="login-email" required>
@@ -40,6 +39,7 @@
             </div>
             
             <div class="form-content hidden" id="register-form">
+				<div class="error-message error-message-register" style="display:none"></div>
                 <h2>Register</h2>
 				<div class="input-group">
 					<label for="register-name">Full Name</label>

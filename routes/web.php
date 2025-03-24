@@ -9,6 +9,8 @@ use App\Http\Middleware\JwtAuth;
 
 Route::post("/account/register", [users::class, 'register']);
 Route::post("/account/login", [users::class, 'login']);
+Route::post("/account/updateInfo", [users::class, 'updateInfo'])->middleware(JwtAuth::class);
+
 Route::post("/admin/insertProduct", [products::class, 'insertProduct'])->middleware(JwtAuth::class);
 Route::post("/admin/editProduct", [products::class, 'editProduct'])->middleware(JwtAuth::class);
 Route::post("/admin/getOrders_wPage", [products::class, 'getOrders_wPage'])->middleware(JwtAuth::class);
@@ -31,22 +33,33 @@ Route::get('/category/{catg?}', function (?string $catg = null) {
 });
 
 Route::get('/account/login', function (Request $request) {
-	if ($request->cookie("firebase_token")){
-		return redirect("/account/logout");
+	if ($request->cookie("firebase_token") || $request->session()->get("fbase_uid")){
+		return redirect("/account");
 	}
 	return view('account.login');
+});
+
+Route::get('/account/logout', function (Request $request) {
+	session()->forget("fbase_uid");
+	return redirect("/account/login")->cookie('firebase_token', '', -1);
 });
 
 Route::middleware([JwtAuth::class])->group(function () {
 	// User account 
 	Route::get('/account', function (Request $request) {
-		return view('account.index');
+		$fbase_uid = $request->session()->get("fbase_uid");
+		$info = DB::table("users")
+			->where("fbase_uid", $fbase_uid)
+			->first(["user_id", "email", "full_name", "phone_number"]);
+		$info = json_decode(json_encode($info), true);
+		$user_id = $info["user_id"];
+
+		$adresses = DB::table("adresses")
+			->where("user_id", $user_id)
+			->get(["adress_id", "user_id", "adres_baslik", "adres", "adres_extra", "ulke", "il", "ilce"]);
+		$adresses = json_decode(json_encode($adresses), true);
+		return view('account.index', ["info"=>$info, "adresses"=>$adresses]);
 	});
-	Route::get('/account/logout', function (Request $request) {
-		return redirect("/account")
-        	->cookie('firebase_token', '', -1);
-	});
-	
 
 	//admin panel
 	Route::get('/admin', function (Request $request) {
